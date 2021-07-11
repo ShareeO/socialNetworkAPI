@@ -10,6 +10,6 @@
 
 ## Installation
 Clone Repo from GitHub
-npm i - in terminal
-npm start - start server
-ctrl + c - stop server
+npm i - install dependencies
+npm start - start local server
+ctrl + c - stop local server

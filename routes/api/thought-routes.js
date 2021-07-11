@@ -1,22 +1,20 @@
 const router = require('express').Router();
 const {
-  getThoughts,
-  getSingleThought,
-  createThought,
-  updateThought,
-  deleteThought,
-  addReaction,
-  removeReaction,
+    getThoughts,
+    getSingleThought,
+    createThought,
+    updateThought,
+    deleteThought,
+    addReaction,
+    removeReaction,
 } = require('../../controllers/thought-controller');
 const { Thought } = require('../../models');
 
 // /api/thoughts
-router.get('/', (req, res) => {
-    getThoughts.findAll({
-        model: React,
-        model: User,
-        model: Thought,
-});
+router
+    .route('/')
+    .get(getAllThoughts)
+    .post(createThought);
 
 
 router.post(createThought);
