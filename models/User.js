@@ -1,7 +1,6 @@
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const { Schema, model } = require('mongoose');
 
-const BlogPost = new Schema({
+const userSchema = new Schema({
 username: {
     type: String,
     unique: true,
@@ -34,7 +33,7 @@ friends: [
     toJSON: {
         getters: true
     },
-    id: false
+        id: false
 }
 );
 
