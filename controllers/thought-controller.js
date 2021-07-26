@@ -1,43 +1,50 @@
 const { Thought, User } = require('../models');
 
 const thoughtController = {
+
     // get all thoughts
     getAllThoughts(req, res) {
         Thought.find()
-        .sort({ _id: -1 })
-        .then((dbThoughtData) => res.json(dbThoughtData))
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-    },
-
-    // get single thought by id
-    getThoughtById({params}, res) {
-        Thought.findOne({ _id: params.id })
-        .select('-__v')
+     // sort in DESC order by the _id value.
+        .sort({createdAt: -1 })
         .then((dbThoughtData) => {
             res.json(dbThoughtData);
-        })
+    })
         .catch((err) => {
             console.log(err);
-            res.status(400);
+            res.status(400).json(err);
+        });
+},
+
+    // get single thought by id
+    getThoughtById(req, res) {
+        Thought.findOne({ _id: params.thoughtId })
+        User.findOne({ _id: req.params.userId })
+        .then((dbThoughData) => {
+        if (!dbThoughtData) {
+            return res.status(404).json({ message: 'Thought with this ID does not exist.' });
+        }
+        res.json(dbThoughtData);
+        })
+        .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
         });
     },
     
     // create a thought
     createThought(req, res) {
         Thought.create(req.body)
-        .then(({_id}) => {
+        .then((dbThoughtData) => {
             return User.findOneAndUpdate(
             { _id: req.body.userId },
-            { $push: { thoughts: _id } },
+            { $push: { thoughts: dbThoughtData._id } },
             { new: true }
             );
         })
         .then((dbUserData) => {
             if (!dbUserData) {
-            return res.status(404).json({ message: 'Thought created but no user with this id!' });
+            return res.status(404).json({ message: 'Thought created!' });
             }
 
             res.json({ message: 'Thought successfully created!' });
@@ -49,8 +56,8 @@ const thoughtController = {
     },
 
     // update thought
-    updateThought({body}, res) {
-        Thought.findOneAndUpdate({ _id: body.thoughtId }, { thoughtText: body.thoughtText }, { runValidators: true, new: true })
+    updateThought(req, res) {
+        Thought.findOneAndUpdate({ _id: params.thoughtId }, { $set: req.body }, { runValidators: true, new: true })
         .then((dbThoughtData) => {
             if (!dbUserData) {
                 return res.status(404).json({ message: 'No thought with this id!' });
@@ -108,11 +115,12 @@ const thoughtController = {
             res.status(500).json(err);
         });
     },
+
     // remove reaction from a thought
     removeReaction(req, res) {
         Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-//        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
         { runValidators: true, new: true }
         )
         .then((dbThoughtData) => {
