@@ -18,9 +18,9 @@ const thoughtController = {
 
     // get single thought by id
     getThoughtById(req, res) {
-        Thought.findOne({ _id: params.thoughtId })
-        User.findOne({ _id: req.params.userId })
-        .then((dbThoughData) => {
+        Thought.findOne({ _id: req.params.thoughtId })
+        // User.findOne({ _id: req.params.userId })
+        .then((dbThoughtData) => {
         if (!dbThoughtData) {
             return res.status(404).json({ message: 'Thought with this ID does not exist.' });
         }
@@ -57,7 +57,7 @@ const thoughtController = {
 
     // update thought
     updateThought(req, res) {
-        Thought.findOneAndUpdate({ _id: params.thoughtId }, { $set: req.body }, { runValidators: true, new: true })
+        Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true })
         .then((dbThoughtData) => {
             if (!dbUserData) {
                 return res.status(404).json({ message: 'No thought with this id!' });
@@ -87,7 +87,7 @@ const thoughtController = {
         })
         .then((dbUserData) => {
             if (!dbUserData) {
-            return res.status(404).json({ message: 'Thought created but no user with this id!' });
+            return res.status(404).json({ message: 'Thought successfully deleted not associated with user!' });
             }
             res.json({ message: 'Thought successfully deleted!' });
         })

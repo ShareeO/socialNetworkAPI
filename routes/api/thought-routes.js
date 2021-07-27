@@ -19,15 +19,19 @@ router
 
 // /api/thoughts/thoughtId
 router
-    .route('/:userId')
+    .route('/:thoughtId')
     .get(getThoughtById)
     .put(updateThought)
     .delete(deleteThought);
 
-// /api/thoughts/:thoughtId/reactionId
+// /api/thoughts/:thoughtId/reactions
 router.
-    route('/:id/reactions')
-    .delete(removeReaction)
+    route('/:thoughtId/reactions')
     .post(addReaction);
+
+    // /api/thoughts/:thoughtId/reactions/:reactionId
+router.
+route('/:thoughtId/reactions/:reactionId')
+.delete(removeReaction)
 
 module.exports = router;
